@@ -43,7 +43,7 @@ const routes = [
       {
         path: "login",
         name: "Login",
-        component: () => import("../views/Home.vue"),
+        component: () => import("../views/Login.vue"),
         beforeEnter: loggedInGuard,
       },
     ],

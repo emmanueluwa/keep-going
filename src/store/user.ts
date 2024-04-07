@@ -6,7 +6,7 @@ import router from "../router";
 
 import type { UserSession } from "../types/user";
 
-export const userUserStore = defineStore("user", () => {
+export const useUserStore = defineStore("user", () => {
   const session: Ref<UserSession | null> = ref(null);
 
   const login = async (email: string, callback?: Function): Promise<void> => {
@@ -63,5 +63,5 @@ export const userUserStore = defineStore("user", () => {
     return false;
   });
 
-  return { login, logout, setUserSession, userIsLoggedIn };
+  return { login, logout, setUserSession, userIsLoggedIn, insertProfile };
 });

@@ -1,16 +1,16 @@
 <script lang="ts" setup>
 import { onMounted } from "vue";
 import { useSupabaseClient } from "../src/composables/supabase";
-import { useUserStore } from "../src/store/user";
+import { useUserStore } from "./store/user";
+
+import AppMenu from "./components/AppMenu.vue";
 
 const userStore = useUserStore();
 
 onMounted(async () => {
   const { data } = await useSupabaseClient.auth.getSession();
-  if (data && data.session && data.session.user) {
-    await userStore.insertProfile(data.session);
-    userStore.setUserSession(data.session);
-  }
+
+  if (data && data.session) userStore.setUserSession(data.session);
 
   //keep track of state change to handle updated tokens/invalidation
   useSupabaseClient.auth.onAuthStateChange((_, _session) => {
@@ -19,5 +19,8 @@ onMounted(async () => {
 });
 </script>
 <template>
-  <router-view />
+  <v-app>
+    <app-menu />
+    <v-main><router-view /></v-main
+  ></v-app>
 </template>
