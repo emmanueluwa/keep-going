@@ -1,27 +1,5 @@
 // Composables
 import { createRouter, createWebHistory } from "vue-router";
-import { useSupabaseClient } from "@/composables/supabase";
-
-const loginRoute = { name: "Login" };
-const loggedInRoute = { name: "Home" };
-
-const loginGuard = async (to: any, from: any, next: Function) => {
-  const { data } = await useSupabaseClient.auth.getSession();
-  if (data.session) {
-    next();
-  } else {
-    next(loginRoute);
-  }
-};
-
-const loggedInGuard = async (to: any, from: any, next: Function) => {
-  const { data } = await useSupabaseClient.auth.getSession();
-  if (data.session) {
-    next(loggedInRoute);
-  } else {
-    next();
-  }
-};
 
 const routes = [
   {
@@ -36,7 +14,6 @@ const routes = [
         // which is lazy-loaded when the route is visited.
         component: () =>
           import(/* webpackChunkName: "home" */ "@/views/Home.vue"),
-        beforeEnter: loginGuard,
       },
     ],
   },
