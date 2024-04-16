@@ -4,6 +4,11 @@ import type { Ref } from "vue";
 import { VDatePicker } from "vuetify/components";
 import type { Routine } from "../types/fitness";
 import AddRoutine from "./AddRoutine.vue";
+import { useFitnessStore } from "../store/fitness";
+import { useAppStore } from "../store/app";
+
+const fitnessStore = useFitnessStore();
+const appStore = useAppStore();
 
 const routines: Ref<Routine[]> = ref([]);
 const showDialogRoutine: Ref<boolean> = ref(false);
@@ -26,6 +31,34 @@ const formattedDate: Ref<string> = computed(() => {
   }
   return "";
 });
+
+const canSaveWorkout = computed(() => {
+  return routines.value.length > 0;
+});
+
+const reset = () => {
+  routines.value = [];
+  selectedDate.value = undefined;
+};
+
+const saveWorkout = () => {
+  if (selectedDate.value && routines.value?.length > 0) {
+    fitnessStore.saveWorkout({
+      date: selectedDate.value,
+      routines: routines.value,
+    });
+    appStore.showDialog({
+      title: "Succcess",
+      contents: "Workout saved successfully",
+    });
+    reset();
+  } else {
+    appStore.showDialog({
+      title: "Error",
+      contents: "Please selected a date and add at least one routine",
+    });
+  }
+};
 </script>
 
 <template>
@@ -67,6 +100,16 @@ const formattedDate: Ref<string> = computed(() => {
           ></v-card
         >
       </v-dialog>
+    </v-row>
+    <v-row class="mb-6">
+      <v-btn
+        block
+        size="x-large"
+        :disabled="!canSaveWorkout"
+        @click="saveWorkout"
+        v-if="selectedDate"
+        >Save workout</v-btn
+      >
     </v-row>
   </v-container>
 </template>
