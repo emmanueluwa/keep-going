@@ -63,5 +63,12 @@ export const useUserStore = defineStore("user", () => {
     return false;
   });
 
-  return { login, logout, setUserSession, userIsLoggedIn, insertProfile };
+  return {
+    session,
+    login,
+    logout,
+    setUserSession,
+    userIsLoggedIn,
+    insertProfile,
+  };
 });
